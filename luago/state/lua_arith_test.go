@@ -6,7 +6,7 @@ import (
 )
 
 func TestArith(t *testing.T) {
-	ls := NewLuaState()
+	ls := NewLuaState(20, nil)
 	ls.PushInteger(1)
 	printStack(ls)
 	ls.PushString("2.0")

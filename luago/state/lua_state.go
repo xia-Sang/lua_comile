@@ -3,15 +3,72 @@ package state
 import (
 	"fmt"
 	"luago/api"
+	"luago/binchunk"
 )
 
 type luaState struct {
-	stack *luaStack
+	stack *luaStack           //stack信息
+	proto *binchunk.ProtoType //proto字段 函数原型
+	pc    int                 //pc字段 程序计数器
 }
 
-func NewLuaState() *luaState {
+// Concat implements api.LuaVm.
+func (ls *luaState) Concat(n int) {
+	panic("unimplemented")
+}
+
+// IsFunction implements api.LuaVm.
+func (ls *luaState) IsFunction(idx int) bool {
+	panic("unimplemented")
+}
+
+// IsTable implements api.LuaVm.
+func (ls *luaState) IsTable(idx int) bool {
+	panic("unimplemented")
+}
+
+// IsThread implements api.LuaVm.
+func (ls *luaState) IsThread(idx int) bool {
+	panic("unimplemented")
+}
+
+// 实现luaVm接口
+func (ls *luaState) PC() int {
+	return ls.pc
+}
+
+// 增加地址信息
+func (ls *luaState) AddPC(n int) {
+	ls.pc += n
+}
+
+// PC索引从函数原型的指令表里取出当前指令
+func (ls *luaState) Fetch() uint32 {
+	i := ls.proto.Code[ls.pc]
+	ls.pc++
+	return i
+}
+
+// 索引从函数原型的常量表里取出一个常量值
+func (ls *luaState) GetConst(index int) {
+	c := ls.proto.Constants[index]
+	ls.stack.push(c)
+}
+
+// 调用 GetConst 方法 把某个常量推人栈顶
+// 调用 PushValue 方法把某个索引处的栈值推人栈顶
+func (ls *luaState) GetRK(rk int) {
+	if rk > 0xFF { // constant
+		ls.GetConst(rk & 0xFF)
+	} else { //register
+		ls.PushValue(rk + 1)
+	}
+}
+func NewLuaState(stackSize int, proto *binchunk.ProtoType) *luaState {
 	return &luaState{
 		stack: newLuaStack(20),
+		proto: proto,
+		pc:    0,
 	}
 }
 
@@ -216,6 +273,9 @@ func (ls *luaState) ToString(index int) string {
 
 	s, _ := ls.ToStringX(index)
 	return s
+}
+func PrintStack(ls *luaState) {
+	printStack(ls)
 }
 func printStack(ls *luaState) {
 	top := ls.GetTop()

@@ -1,5 +1,7 @@
 package vm
 
+import "luago/api"
+
 /*
 IABC		 // [  B:9  ][  C:9  ][ A:8  ][OP:6]
 IABx         // [      Bx:18     ][ A:8  ][OP:6]
@@ -7,6 +9,15 @@ IAsBx        // [     sBx:18     ][ A:8  ][OP:6]
 IAx          // [           Ax:26        ][OP:6]
 */
 type Instruction uint32
+
+func (i Instruction) Execute(vm api.LuaVm) {
+	action := opcodes[i.Opcode()].action
+	if action != nil {
+		action(i, vm)
+	} else {
+		panic(i.OpName())
+	}
+}
 
 const MAXARG_Bx = 1<<18 - 1       // 262143
 const MAXARG_sBx = MAXARG_Bx >> 1 // 131071
