@@ -111,7 +111,6 @@ func (ls *luaState) PushNil() {
 func (ls *luaState) PushBoolean(data bool) {
 	ls.stack.push(data)
 }
-
 func (ls *luaState) PushInteger(data int64) {
 	ls.stack.push(data)
 }
@@ -184,19 +183,13 @@ func (ls *luaState) ToBoolean(index int) bool {
 	return convertToBoolean(val)
 }
 func (ls *luaState) ToNumber(index int) float64 {
+
 	n, _ := ls.ToNumberX(index)
 	return n
 }
 func (ls *luaState) ToNumberX(index int) (float64, bool) {
 	val := ls.stack.get(index)
-	switch x := val.(type) {
-	case float64:
-		return x, true
-	case int64:
-		return float64(x), true
-	default:
-		return 0, false
-	}
+	return convertToFloat(val)
 }
 func (ls *luaState) ToInteger(index int) int64 {
 	i, _ := ls.ToIntegerX(index)
@@ -204,8 +197,7 @@ func (ls *luaState) ToInteger(index int) int64 {
 }
 func (ls *luaState) ToIntegerX(index int) (int64, bool) {
 	val := ls.stack.get(index)
-	i, ok := val.(int64)
-	return i, ok
+	return convertToInteger(val)
 }
 func (ls *luaState) ToStringX(index int) (string, bool) {
 	val := ls.stack.get(index)
@@ -221,6 +213,7 @@ func (ls *luaState) ToStringX(index int) (string, bool) {
 	}
 }
 func (ls *luaState) ToString(index int) string {
+
 	s, _ := ls.ToStringX(index)
 	return s
 }

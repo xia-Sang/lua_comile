@@ -1,20 +1,8 @@
 package api
 
-// 基本数据类型
-const (
-	LUA_TNONE = iota - 1 //-1
-	LUA_TNIL
-	LUA_TBOOLEAN
-	LUA_TLIGHTUSERDATA
-	LUA_TNUMBER
-	LUA_TSTRING
-	LUA_TTABLE
-	LUA_TFUNCTION
-	LUA_TUSERDATA
-	LUA_TTHREAD
-)
-
 type LuaType = int
+type ArithOp = int   //类型别名
+type CompareOp = int //类型别名
 
 // 基本状态类型
 type LuaState interface {
@@ -56,4 +44,9 @@ type LuaState interface {
 	PushInteger(n int64)
 	PushNumber(n float64)
 	PushString(s string)
+	// 新添加四个方法
+	Arith(op ArithOp)                          //执行算术和按位运算，
+	Compare(idx1, idx2 int, op CompareOp) bool //执行比较运算
+	Len(index int)                             //长度原酸
+	Concat(n int)                              //拼接运算
 }
