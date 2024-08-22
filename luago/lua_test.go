@@ -17,7 +17,7 @@ func TestLuaShow(t *testing.T) {
 	data, err := os.ReadFile(filename)
 	assert.Nil(t, err)
 	proto := binchunk.Updump(data)
-	list(proto)
+	luaMain(proto)
 }
 func luaMain(pro *binchunk.ProtoType) {
 	nRegs := int(pro.MaxStackSize)
