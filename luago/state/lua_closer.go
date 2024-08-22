@@ -1,12 +1,14 @@
 package state
 
-import "luago/binchunk"
+import (
+	"luago/binchunk"
+)
 
-type luaClosure struct {
-	proto  *binchunk.ProtoType //lua 闭包
-	goFunc GoFunction          //go 闭包
+type closure struct {
+	proto *binchunk.ProtoType //lua 闭包
+	// goFunc GoFunction          //go 闭包
 }
 
-func newLuaCloser(proto *binchunk.ProtoType) *luaClosure {
-	return &luaClosure{proto: proto}
+func newLuaCloser(proto *binchunk.ProtoType) *closure {
+	return &closure{proto: proto}
 }

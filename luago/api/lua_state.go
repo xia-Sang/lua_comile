@@ -2,7 +2,7 @@ package api
 
 // 基本状态类型
 type LuaState interface {
-	/* basic stack manipulation */
+	//基本的栈实现
 	GetTop() int
 	AbsIndex(idx int) int
 	CheckStack(n int) bool
@@ -14,7 +14,7 @@ type LuaState interface {
 	Remove(idx int)
 	Rotate(idx, n int)
 	SetTop(idx int)
-	/* access functions (stack -> Go) */
+	//访问函数实现
 	TypeName(tp LuaType) string
 	Type(idx int) LuaType
 	IsNone(idx int) bool
@@ -34,7 +34,7 @@ type LuaState interface {
 	ToNumberX(idx int) (float64, bool)
 	ToString(idx int) string
 	ToStringX(idx int) (string, bool)
-	/* push functions (Go -> stack) */
+	// push函数实现
 	PushNil()
 	PushBoolean(b bool)
 	PushInteger(n int64)

@@ -26,25 +26,24 @@ func (ls *luaState) IsThread(idx int) bool {
 	panic("unimplemented")
 }
 
-// 实现luaVm接口
+// PC 实现luaVm接口
 func (ls *luaState) PC() int {
 	return ls.stack.pc
 }
 
-// 增加地址信息
+// AddPC 增加地址信息
 func (ls *luaState) AddPC(n int) {
 	ls.stack.pc += n
 }
 
-// PC索引从函数原型的指令表里取出当前指令
+// Fetch PC索引从函数原型的指令表里取出当前指令
 func (ls *luaState) Fetch() uint32 {
-
 	i := ls.stack.closure.proto.Code[ls.stack.pc]
 	ls.stack.pc++
 	return i
 }
 
-// 索引从函数原型的常量表里取出一个常量值
+// GetConst 索引从函数原型的常量表里取出一个常量值
 func (ls *luaState) GetConst(index int) {
 	c := ls.stack.closure.proto.Constants[index]
 	ls.stack.push(c)

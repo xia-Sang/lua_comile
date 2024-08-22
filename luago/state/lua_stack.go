@@ -1,12 +1,12 @@
 package state
 
 type luaStack struct {
-	slots   []luaValue  //存储数值信息
-	top     int         //存储栈索引
-	prev    *luaStack   //之前的调用栈
-	closure *luaClosure //闭包
-	varArgs []luaValue  //参数
-	pc      int         //程序计数器
+	slots   []luaValue //存储数值信息
+	top     int        //存储栈索引
+	prev    *luaStack  //之前的调用栈
+	closure *closure   //闭包
+	varArgs []luaValue //参数
+	pc      int        //程序计数器
 }
 
 func newLuaStack(size int) *luaStack {
@@ -53,7 +53,7 @@ func (ls *luaStack) popN(n int) []luaValue {
 	return vals
 }
 
-// pop数据
+// push数据
 func (ls *luaStack) pushN(vals []luaValue, n int) {
 	nVals := len(vals)
 	if n < 0 {
