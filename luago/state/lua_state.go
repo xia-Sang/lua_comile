@@ -7,23 +7,28 @@ import (
 )
 
 type luaState struct {
-	stack *luaStack           //stack信息
-	proto *binchunk.ProtoType //proto字段 函数原型
-	pc    int                 //pc字段 程序计数器
+	stack    *luaStack           //stack信息
+	proto    *binchunk.ProtoType //proto字段 函数原型
+	pc       int                 //pc字段 程序计数器
+	registry *luaTable           //添加注册表信息
 }
 
 func New() *luaState {
-	return &luaState{
-		stack: newLuaStack(20),
-	}
+	registry := newLuaTable(0, 0)
+	registry.put(api.LUA_RIDX_GLOBALS, newLuaTable(0, 0))
+
+	ls := &luaState{registry: registry}
+	ls.pushLuaStack(newLuaStack(api.LUA_MINSTACK, ls))
+	return ls
 }
-func NewLuaState(stackSize int, proto *binchunk.ProtoType) *luaState {
-	return &luaState{
-		stack: newLuaStack(stackSize),
-		proto: proto,
-		pc:    0,
-	}
-}
+
+// func NewLuaState(stackSize int, proto *binchunk.ProtoType) *luaState {
+// 	return &luaState{
+// 		stack: newLuaStack(stackSize),
+// 		proto: proto,
+// 		pc:    0,
+// 	}
+// }
 
 // 返回绝对索引
 func (ls *luaState) AbsIndex(index int) int {

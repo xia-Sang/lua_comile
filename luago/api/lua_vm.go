@@ -4,6 +4,15 @@ type LuaType = int
 type ArithOp = int   //类型别名
 type CompareOp = int //类型别名
 
+type GoFunction func(LuaState) int
+
+const (
+	LUA_MINSTACK            = 20
+	LUA_MAXSTACK            = 1000000
+	LUA_REGISTRYINDEX       = -LUA_MAXSTACK - 1000
+	LUA_RIDX_GLOBALS  int64 = 2
+)
+
 type LuaVm interface {
 	LuaState             //基本状态类型
 	PC() int             //返回当前pc

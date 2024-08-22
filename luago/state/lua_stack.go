@@ -1,5 +1,7 @@
 package state
 
+import "luago/api"
+
 type luaStack struct {
 	slots   []luaValue //存储数值信息
 	top     int        //存储栈索引
@@ -7,12 +9,14 @@ type luaStack struct {
 	closure *closure   //闭包
 	varArgs []luaValue //参数
 	pc      int        //程序计数器
+	state   *luaState  //状态字段
 }
 
-func newLuaStack(size int) *luaStack {
+func newLuaStack(size int, state *luaState) *luaStack {
 	return &luaStack{
 		slots: make([]luaValue, size),
 		top:   0,
+		state: state,
 	}
 }
 
@@ -70,6 +74,9 @@ func (ls *luaStack) pushN(vals []luaValue, n int) {
 
 // 索引转换
 func (ls *luaStack) absIndex(index int) int {
+	if index <= api.LUA_REGISTRYINDEX {
+		return index
+	}
 	if index >= 0 {
 		return index
 	}
@@ -78,12 +85,18 @@ func (ls *luaStack) absIndex(index int) int {
 
 // 判断索引是否有效
 func (ls *luaStack) isValid(index int) bool {
+	if index == api.LUA_REGISTRYINDEX {
+		return true
+	}
 	absIndex := ls.absIndex(index)
 	return absIndex > 0 && index <= ls.top
 }
 
 // get数据
 func (ls *luaStack) get(index int) luaValue {
+	if index == api.LUA_REGISTRYINDEX {
+		return ls.state.registry
+	}
 	absIndex := ls.absIndex(index)
 	if absIndex > 0 && absIndex <= ls.top {
 		return ls.slots[absIndex-1]
@@ -93,6 +106,10 @@ func (ls *luaStack) get(index int) luaValue {
 
 // set数据
 func (ls *luaStack) set(index int, value luaValue) {
+	if index == api.LUA_REGISTRYINDEX {
+		ls.state.registry = value.(*luaTable)
+		return
+	}
 	absIndex := ls.absIndex(index)
 	if absIndex > 0 && absIndex <= ls.top {
 		ls.slots[absIndex-1] = value

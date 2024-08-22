@@ -5,7 +5,7 @@ import (
 )
 
 func TestLuaState(t *testing.T) {
-	ls := NewLuaState(20, nil)
+	ls := New()
 	ls.PushBoolean(true)
 	printStack(ls)
 	ls.PushInteger(10)

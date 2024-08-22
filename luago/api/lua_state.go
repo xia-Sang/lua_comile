@@ -58,4 +58,13 @@ type LuaState interface {
 	// 函数调用栈
 	Load(chunk []byte, chunkName, mode string) int
 	Call(nArgs, nResults int)
+	// 实现go拓展
+	PushGoFunction(fn GoFunction)
+	IsGoFunction(index int) bool
+	ToGoFunction(index int) GoFunction
+	// 全局变量
+	PushGlobalTable()
+	GetGlobal(name string) LuaType
+	SetGlobal(name string)
+	Register(name string, fn GoFunction)
 }
