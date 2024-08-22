@@ -17,6 +17,8 @@ func typeOf(value luaValue) api.LuaType {
 		return api.LUA_TNUMBER
 	case string:
 		return api.LUA_TSTRING
+	case *luaTable:
+		return api.LUA_TTABLE
 	default:
 		panic("错误的数据类型！")
 	}

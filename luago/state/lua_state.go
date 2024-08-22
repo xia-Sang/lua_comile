@@ -12,11 +12,6 @@ type luaState struct {
 	pc    int                 //pc字段 程序计数器
 }
 
-// Concat implements api.LuaVm.
-func (ls *luaState) Concat(n int) {
-	panic("unimplemented")
-}
-
 // IsFunction implements api.LuaVm.
 func (ls *luaState) IsFunction(idx int) bool {
 	panic("unimplemented")

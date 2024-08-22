@@ -13,7 +13,7 @@ import (
 
 func TestLuaShow(t *testing.T) {
 	// filename := "./hw.luac"
-	filename := "./for.luac"
+	filename := "./lua/for.luac"
 	data, err := os.ReadFile(filename)
 	assert.Nil(t, err)
 	proto := binchunk.Updump(data)
@@ -34,4 +34,12 @@ func luaMain(pro *binchunk.ProtoType) {
 			break
 		}
 	}
+}
+func TestLuaShow1(t *testing.T) {
+	// filename := "./hw.luac"
+	filename := "./lua/table.luac"
+	data, err := os.ReadFile(filename)
+	assert.Nil(t, err)
+	proto := binchunk.Updump(data)
+	luaMain(proto)
 }

@@ -21,7 +21,7 @@ func TestArith(t *testing.T) {
 	printStack(ls)
 	ls.Len(2)
 	printStack(ls)
-	ls.ConCat(3)
+	ls.Concat(3)
 	printStack(ls)
 	ls.PushBoolean(ls.Compare(1, 2, api.LUA_OPEQ))
 	printStack(ls)

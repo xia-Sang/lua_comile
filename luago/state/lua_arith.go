@@ -94,6 +94,8 @@ func (ls *luaState) Len(index int) {
 	val := ls.stack.get(index)
 	if s, ok := val.(string); ok {
 		ls.stack.push(int64(len(s)))
+	} else if t, ok := val.(*luaTable); ok {
+		ls.stack.push(int64(t.len()))
 	} else {
 		panic("length error!")
 	}
@@ -190,7 +192,7 @@ func le(a, b luaValue) bool {
 	}
 	panic("comparison error!")
 }
-func (ls *luaState) ConCat(n int) {
+func (ls *luaState) Concat(n int) {
 	if n == 0 {
 		ls.stack.push("")
 	} else if n >= 2 {
