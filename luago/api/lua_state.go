@@ -55,4 +55,7 @@ type LuaState interface {
 	SetTable(index int)
 	SetField(index int, k string)
 	SetI(index int, n int64)
+	// 函数调用栈
+	Load(chunk []byte, chunkName, mode string) int
+	Call(nArgs, nResults int)
 }

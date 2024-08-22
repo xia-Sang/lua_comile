@@ -1,5 +1,6 @@
 {
     "Lua.diagnostics.globals": [
-        "bar"
+        "bar",
+        "fail"
     ]
 }

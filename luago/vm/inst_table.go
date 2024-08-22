@@ -30,6 +30,11 @@ const LFIELDS_PER_FLUSH = 50
 func setList(i Instruction, vm api.LuaVm) {
 	a, b, c := i.ABC()
 	a += 1
+	bIsZero := b == 0
+	if bIsZero {
+		b = int(vm.ToInteger(-1)) - a - 1
+		vm.Pop(1)
+	}
 	if c > 0 {
 		c = c - 1
 	} else {
@@ -40,5 +45,13 @@ func setList(i Instruction, vm api.LuaVm) {
 		index++
 		vm.PushValue(a + j)
 		vm.SetI(a, index)
+	}
+	if bIsZero {
+		for j := vm.RegisterCount() + 1; j <= vm.GetTop(); j++ {
+			index++
+			vm.PushValue(j)
+			vm.SetI(a, index)
+		}
+		vm.SetTop(vm.RegisterCount())
 	}
 }

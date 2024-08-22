@@ -43,3 +43,12 @@ func TestLuaShow1(t *testing.T) {
 	proto := binchunk.Updump(data)
 	luaMain(proto)
 }
+func TestLuaShow2(t *testing.T) {
+	// filename := "./hw.luac"
+	filename := "./lua/luac.out"
+	data, err := os.ReadFile(filename)
+	assert.Nil(t, err)
+	ls := state.New()
+	ls.Load(data, filename, "b")
+	ls.Call(0, 0)
+}

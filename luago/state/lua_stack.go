@@ -1,8 +1,12 @@
 package state
 
 type luaStack struct {
-	slots []luaValue //存储数值信息
-	top   int        //存储栈索引
+	slots   []luaValue  //存储数值信息
+	top     int         //存储栈索引
+	prev    *luaStack   //之前的调用栈
+	closure *luaClosure //闭包
+	varArgs []luaValue  //参数
+	pc      int         //程序计数器
 }
 
 func newLuaStack(size int) *luaStack {
@@ -38,6 +42,30 @@ func (ls *luaStack) pop() luaValue {
 	value := ls.slots[ls.top]
 	ls.slots[ls.top] = nil
 	return value
+}
+
+// pop数据
+func (ls *luaStack) popN(n int) []luaValue {
+	vals := make([]luaValue, n)
+	for i := n - 1; i >= 0; i-- {
+		vals[i] = ls.pop()
+	}
+	return vals
+}
+
+// pop数据
+func (ls *luaStack) pushN(vals []luaValue, n int) {
+	nVals := len(vals)
+	if n < 0 {
+		n = nVals
+	}
+	for i := 0; i < n; i++ {
+		if i < nVals {
+			ls.push(vals[i])
+		} else {
+			ls.push(nil)
+		}
+	}
 }
 
 // 索引转换
